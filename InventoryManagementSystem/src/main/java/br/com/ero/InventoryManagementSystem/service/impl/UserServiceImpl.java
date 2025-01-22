@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Email Not Found"));
+                .orElseThrow(() -> new NotFoundException("User Not Found"));
 
         user.setTransactions(null);
 
@@ -107,7 +106,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response updateUser(Long id, UserDTO userDTO) {
-        return null;
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User Not Found"));
+
+        if (userDTO.getEmail() != null) existingUser.setEmail(userDTO.getEmail());
+        if (userDTO.getName() != null) existingUser.setName(userDTO.getName());
+        if (userDTO.getPhoneNumber() != null) existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+        if (userDTO.getRole() != null) existingUser.setRole(userDTO.getRole());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
+        userRepository.save(existingUser);
+
+        return Response.builder()
+                .status(200)
+                .message("User successfully updated")
+                .build();
     }
 
     @Override
