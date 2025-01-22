@@ -6,6 +6,8 @@ import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.dto.UserDTO;
 import br.com.ero.InventoryManagementSystem.entity.User;
 import br.com.ero.InventoryManagementSystem.enums.UserRole;
+import br.com.ero.InventoryManagementSystem.exceptions.InvalidCredentialsException;
+import br.com.ero.InventoryManagementSystem.exceptions.NotFoundException;
 import br.com.ero.InventoryManagementSystem.repository.UserRepository;
 import br.com.ero.InventoryManagementSystem.security.JwtUtils;
 import br.com.ero.InventoryManagementSystem.service.UserService;
@@ -49,7 +51,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response loginUser(LoginRequest loginRequest) {
-        return null;
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("Email Not Found"));
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Password does not match");
+        }
+
+        String token = jwtUtils.generateToken(user.getEmail());
+
+        return Response.builder()
+                .status(200)
+                .message("User logged in successfully")
+                .role(user.getRole())
+                .token(token)
+                .expirationTime("6 months")
+                .build();
     }
 
     @Override
