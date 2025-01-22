@@ -35,4 +35,9 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
+    @GetMapping("/transactions/{userId}")
+    public ResponseEntity<Response> getUserAndTransactions(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserTransactions(userId));
+    }
+
 }
