@@ -1,11 +1,9 @@
 package br.com.ero.InventoryManagementSystem.controller;
 
-import br.com.ero.InventoryManagementSystem.dto.LoginRequest;
-import br.com.ero.InventoryManagementSystem.dto.RegisterRequest;
 import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.dto.UserDTO;
+import br.com.ero.InventoryManagementSystem.entity.User;
 import br.com.ero.InventoryManagementSystem.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,6 +36,11 @@ public class UserController {
     @GetMapping("/transactions/{userId}")
     public ResponseEntity<Response> getUserAndTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserTransactions(userId));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok(userService.getCurrentLoggeddInUser());
     }
 
 }
