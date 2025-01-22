@@ -1,0 +1,79 @@
+package br.com.ero.InventoryManagementSystem.service.impl;
+
+import br.com.ero.InventoryManagementSystem.dto.LoginRequest;
+import br.com.ero.InventoryManagementSystem.dto.RegisterRequest;
+import br.com.ero.InventoryManagementSystem.dto.Response;
+import br.com.ero.InventoryManagementSystem.dto.UserDTO;
+import br.com.ero.InventoryManagementSystem.entity.User;
+import br.com.ero.InventoryManagementSystem.enums.UserRole;
+import br.com.ero.InventoryManagementSystem.repository.UserRepository;
+import br.com.ero.InventoryManagementSystem.security.JwtUtils;
+import br.com.ero.InventoryManagementSystem.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
+    private final JwtUtils jwtUtils;
+
+    @Override
+    public Response registerUser(RegisterRequest registerRequest) {
+        UserRole userRole = UserRole.MANAGER;
+        if (registerRequest.getRole() != null) {
+            userRole = registerRequest.getRole();
+        }
+        User userToSave = User.builder()
+                .name(registerRequest.getName())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .phoneNumber(registerRequest.getPhoneNumber())
+                .role(userRole)
+                .build();
+
+        userRepository.save(userToSave);
+
+        return Response.builder()
+                .status(200)
+                .message("User created successfully")
+                .build();
+    }
+
+    @Override
+    public Response loginUser(LoginRequest loginRequest) {
+        return null;
+    }
+
+    @Override
+    public User getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User getCurrentLoggeddInUser() {
+        return null;
+    }
+
+    @Override
+    public Response updateUser(Long id, UserDTO userDTO) {
+        return null;
+    }
+
+    @Override
+    public Response deleteUser(Long id) {
+        return null;
+    }
+
+    @Override
+    public Response getUserTransactions(Long id) {
+        return null;
+    }
+}
