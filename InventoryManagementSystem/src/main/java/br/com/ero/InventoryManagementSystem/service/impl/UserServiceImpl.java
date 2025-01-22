@@ -128,7 +128,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response deleteUser(Long id) {
-        return null;
+        userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User Not Found"));
+
+        userRepository.deleteById(id);
+
+        return Response.builder()
+                .status(200)
+                .message("User successfully deleted")
+                .build();
     }
 
     @Override
