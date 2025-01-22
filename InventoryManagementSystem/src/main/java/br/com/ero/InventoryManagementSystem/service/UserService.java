@@ -12,7 +12,7 @@ public interface UserService {
 
     Response loginUser(LoginRequest loginRequest);
 
-    User getAllUsers();
+    Response getAllUsers();
 
     User getCurrentLoggeddInUser();
 

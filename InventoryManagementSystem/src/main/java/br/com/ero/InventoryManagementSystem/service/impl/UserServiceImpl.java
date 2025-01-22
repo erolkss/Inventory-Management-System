@@ -14,8 +14,13 @@ import br.com.ero.InventoryManagementSystem.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -70,8 +75,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAllUsers() {
-        return null;
+    public Response getAllUsers() {
+        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
+
+        List<UserDTO> userDTOS = modelMapper.map(users, new TypeToken<List<UserDTO>>() {
+        }.getType());
+
+        userDTOS.forEach(user -> user.setTransactions(null));
+
+        return Response.builder()
+                .status(200)
+                .message("Success")
+                .users(userDTOS)
+                .build();
     }
 
     @Override
