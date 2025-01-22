@@ -3,6 +3,7 @@ package br.com.ero.InventoryManagementSystem.controller;
 import br.com.ero.InventoryManagementSystem.dto.LoginRequest;
 import br.com.ero.InventoryManagementSystem.dto.RegisterRequest;
 import br.com.ero.InventoryManagementSystem.dto.Response;
+import br.com.ero.InventoryManagementSystem.dto.UserDTO;
 import br.com.ero.InventoryManagementSystem.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
 }
