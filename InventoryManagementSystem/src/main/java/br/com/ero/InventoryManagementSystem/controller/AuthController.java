@@ -1,5 +1,6 @@
 package br.com.ero.InventoryManagementSystem.controller;
 
+import br.com.ero.InventoryManagementSystem.dto.LoginRequest;
 import br.com.ero.InventoryManagementSystem.dto.RegisterRequest;
 import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.service.UserService;
@@ -21,5 +22,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Response> registerUser(@RequestBody @Valid RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.registerUser(registerRequest));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response> loginUser(@RequestBody @Valid LoginRequest loginRequest) {
+        return ResponseEntity.ok(userService.loginUser(loginRequest));
     }
 }
