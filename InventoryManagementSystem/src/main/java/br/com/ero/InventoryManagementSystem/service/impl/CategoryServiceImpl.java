@@ -3,6 +3,7 @@ package br.com.ero.InventoryManagementSystem.service.impl;
 import br.com.ero.InventoryManagementSystem.dto.CategoryDTO;
 import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.entity.Category;
+import br.com.ero.InventoryManagementSystem.exceptions.NotFoundException;
 import br.com.ero.InventoryManagementSystem.repository.CategoryRepository;
 import br.com.ero.InventoryManagementSystem.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response getCategoryById(Long id) {
-        return null;
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category Not Found"));
+
+        CategoryDTO categoryDTO = modelMapper.map(category, CategoryDTO.class);
+
+        return Response.builder()
+                .status(200)
+                .message("Success")
+                .category(categoryDTO)
+                .build();
     }
 
     @Override
