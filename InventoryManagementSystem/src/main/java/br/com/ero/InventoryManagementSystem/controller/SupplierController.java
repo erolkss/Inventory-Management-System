@@ -22,4 +22,9 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.addSupplier(supplierDTO));
     }
 
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> getAllCategories() {
+        return ResponseEntity.ok(supplierService.getAllSuppliers());
+    }
 }
