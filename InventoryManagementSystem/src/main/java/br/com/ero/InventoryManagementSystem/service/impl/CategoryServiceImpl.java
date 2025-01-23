@@ -8,7 +8,11 @@ import br.com.ero.InventoryManagementSystem.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -32,7 +36,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response getAllCategories() {
-        return null;
+        List<Category> categories = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
+        List<CategoryDTO> categoryDTOS = modelMapper.map(categories, new TypeToken<List<CategoryDTO>>() {
+        }.getType());
+
+        return Response.builder()
+                .status(200)
+                .message("Success")
+                .categories(categoryDTOS)
+                .build();
     }
 
     @Override
