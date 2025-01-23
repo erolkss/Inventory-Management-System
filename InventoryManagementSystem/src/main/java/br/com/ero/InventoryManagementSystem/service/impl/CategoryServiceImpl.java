@@ -64,7 +64,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response updateCategory(Long id, CategoryDTO categoryDTO) {
-        return null;
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category Not Found"));
+
+        if (categoryDTO.getName() != null) existingCategory.setName(categoryDTO.getName());
+
+        categoryRepository.save(existingCategory);
+
+        return Response.builder()
+                .status(200)
+                .message("Category Successfully Updated")
+                .build();
     }
 
     @Override
