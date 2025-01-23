@@ -66,7 +66,15 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Response getSupplierById(Long id) {
-        return null;
+        Supplier Supplier = supplierRepository.findById(id).orElseThrow(() -> new NotFoundException("Supplier Not Found"));
+
+        SupplierDTO supplierDTO = modelMapper.map(Supplier, SupplierDTO.class);
+
+        return Response.builder()
+                .status(200)
+                .message("Success")
+                .supplier(supplierDTO)
+                .build();
     }
 
     @Override
