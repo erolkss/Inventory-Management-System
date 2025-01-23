@@ -5,9 +5,7 @@ import br.com.ero.InventoryManagementSystem.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -21,4 +19,11 @@ public class CategoryController {
     public ResponseEntity<Response> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Response> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    }
+
+
 }
