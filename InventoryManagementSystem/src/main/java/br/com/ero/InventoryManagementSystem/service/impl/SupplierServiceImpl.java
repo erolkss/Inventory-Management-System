@@ -3,6 +3,7 @@ package br.com.ero.InventoryManagementSystem.service.impl;
 import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.dto.SupplierDTO;
 import br.com.ero.InventoryManagementSystem.entity.Supplier;
+import br.com.ero.InventoryManagementSystem.exceptions.NotFoundException;
 import br.com.ero.InventoryManagementSystem.repository.SupplierRepository;
 import br.com.ero.InventoryManagementSystem.service.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,17 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Response updateSupplier(Long id, SupplierDTO supplierDTO) {
-        return null;
+        Supplier existingCategory = supplierRepository.findById(id).orElseThrow(() -> new NotFoundException("Supplier Not Found"));
+
+        if (supplierDTO.getName() != null) existingCategory.setName(supplierDTO.getName());
+        if (supplierDTO.getAddress() != null) existingCategory.setAddress(supplierDTO.getAddress());
+
+        supplierRepository.save(existingCategory);
+
+        return Response.builder()
+                .status(200)
+                .message("Supplier Successfully Updated")
+                .build();
     }
 
     @Override
