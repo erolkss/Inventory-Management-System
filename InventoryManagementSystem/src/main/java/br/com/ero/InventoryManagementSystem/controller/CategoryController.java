@@ -1,5 +1,6 @@
 package br.com.ero.InventoryManagementSystem.controller;
 
+import br.com.ero.InventoryManagementSystem.dto.CategoryDTO;
 import br.com.ero.InventoryManagementSystem.dto.Response;
 import br.com.ero.InventoryManagementSystem.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Response> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok(categoryService.updateCategory(id, categoryDTO));
+    }
 
 }
