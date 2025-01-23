@@ -9,7 +9,11 @@ import br.com.ero.InventoryManagementSystem.service.SupplierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -48,7 +52,16 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Response getAllSuppliers() {
-        return null;
+        List<Supplier> categories = supplierRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
+        List<SupplierDTO> supplierDTOS = modelMapper.map(categories, new TypeToken<List<SupplierDTO>>() {
+        }.getType());
+
+        return Response.builder()
+                .status(200)
+                .message("Success")
+                .suppliers(supplierDTOS)
+                .build();
     }
 
     @Override
