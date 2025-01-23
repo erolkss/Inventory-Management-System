@@ -27,4 +27,9 @@ public class SupplierController {
     public ResponseEntity<Response> getAllCategories() {
         return ResponseEntity.ok(supplierService.getAllSuppliers());
     }
+
+    @GetMapping("/supplier/{id}")
+    public ResponseEntity<Response> getSupplierById(@PathVariable Long id) {
+        return ResponseEntity.ok(supplierService.getSupplierById(id));
+    }
 }
