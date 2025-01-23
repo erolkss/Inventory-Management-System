@@ -38,4 +38,10 @@ public class SupplierController {
     public ResponseEntity<Response> updateSupplier(@PathVariable Long id, @RequestBody SupplierDTO supplierDTO) {
         return ResponseEntity.ok(supplierService.updateSupplier(id, supplierDTO));
     }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> deleteSupplier(@PathVariable Long id) {
+        return ResponseEntity.ok(supplierService.deleteSupplier(id));
+    }
 }
